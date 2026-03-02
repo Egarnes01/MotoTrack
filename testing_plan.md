@@ -207,3 +207,185 @@ def test_next_due_mileage_normal():
 def test_next_due_mileage_zero_interval():
     with pytest.raises(ValueError):
         calculate_next_due_mileage(12000, 0)
+```
+
+---
+
+# 3. Integration Test Plan
+
+## Integration 1 — Authentication Flow
+
+Components Tested:
+- Registration endpoint
+- Login endpoint
+- JWT issuance
+- Protected route access
+
+Validated:
+- Valid token allows access
+- Invalid or missing token blocks access
+
+Expected Result:
+- Valid token → 200 OK
+- Invalid token → 401 Unauthorized
+
+Failure Scenario:
+- Wrong password → login fails
+
+---
+
+## Integration 2 — Motorcycle CRUD (API ↔ Database)
+
+Components Tested:
+- API endpoints
+- Django ORM
+- Database persistence
+
+Validated:
+- Create, read, update, delete operations
+- Ownership enforcement
+
+Expected Result:
+- Owner can access motorcycle
+- Non-owner receives 403 or 404
+
+Failure Scenario:
+- Unauthorized delete attempt is blocked
+
+---
+
+## Integration 3 — Maintenance Log + Dashboard Update
+
+Components Tested:
+- Log creation endpoint
+- Database write
+- Dashboard query logic
+
+Validated:
+- Log stored correctly
+- Dashboard reflects new entry
+
+Expected Result:
+- 201 Created
+- Dashboard shows new log
+
+Failure Scenario:
+- Missing required field → 400 Bad Request
+
+---
+
+## Integration 4 — Reminder Service (Mocked)
+
+Components Tested:
+- Reminder scheduling logic
+- Notification client wrapper
+
+Validated:
+- Correct message payload formed
+- Send method invoked once
+
+Failure Scenario:
+- External service failure handled without crashing app
+
+---
+
+# 4. System / End-to-End Test Scenarios
+
+## Scenario A — New User Full Workflow
+
+Steps:
+1. Register account
+2. Login
+3. Create motorcycle
+4. Add maintenance log
+5. View dashboard
+
+Expected Outcome:
+- All operations succeed
+- Maintenance appears in history
+- Upcoming service calculated correctly
+
+Possible Failure Points:
+- Duplicate registration
+- Missing token
+- Invalid mileage input
+- Ownership access violation
+
+---
+
+## Scenario B — Mileage Update Triggers Service Alert
+
+Steps:
+1. Login
+2. Update motorcycle mileage
+3. Open dashboard
+4. Confirm service shows as due soon
+
+Expected Outcome:
+- Mileage persists
+- Interval recalculates correctly
+- Dashboard updates accordingly
+
+Possible Failure Points:
+- Validation error
+- Dashboard calculation error
+- Off-by-one interval bug
+
+---
+
+# 5. Non-Functional Testing Considerations
+
+## Performance
+
+- Dashboard queries must scale as logs increase.
+- Avoid N+1 query issues.
+- Use pagination for maintenance history.
+
+## Security
+
+- All protected routes require JWT.
+- Prevent IDOR (Insecure Direct Object Reference).
+- Ensure no sensitive user data leaks in responses.
+
+## Input Validation
+
+- Mileage must be non-negative.
+- Required fields must be enforced.
+- Service types must match allowed values.
+
+## Error Handling
+
+- Consistent JSON error responses.
+- External notification failures must not crash the server.
+- Proper HTTP status codes returned.
+
+---
+
+# 6. Defect Tracking Method
+
+## How Bugs Are Tracked
+
+GitHub Issues will be used for defect tracking.
+
+Each bug must include:
+- Steps to reproduce
+- Expected result
+- Actual result
+- Environment details
+
+## Labels Used
+
+- bug
+- security
+- backend
+- frontend
+- testing
+- high-priority
+
+## Resolution Process
+
+- Developer assigned to issue
+- Fix submitted via pull request
+- Tests added or updated
+- CI must pass
+- Sprint reviewer verifies before closing issue
