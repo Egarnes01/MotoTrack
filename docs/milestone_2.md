@@ -55,16 +55,15 @@ This confirms that the full stack (front-end, API, database) is functioning corr
 
 ---
 
-## Screenshots / Demo Evidence
+## Screenshots 
 
-The following should be included in the GitHub repository:
+The following should be included in the GitHub repository docs/screenshots:
 
 - Screenshot of login/registration page
 - Screenshot of motorcycle creation form
 - Screenshot of maintenance log creation
 - Screenshot of dashboard displaying data
 
-(Alternatively, a video demonstration showing the workflow in real time is included.)
 
 ---
 
