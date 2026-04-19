@@ -1,0 +1,116 @@
+# Code Review & Quality Audit  
+**Project:** MotoTrack  
+**Reviewer:** Levi Green  
+**Code Owner:** Elijah Garnes  
+**Review Type:** Peer Code Review  
+**Date:** 4/15/2026
+---
+
+## 1. Feature Reviewed
+
+### Backend API & Data Layer Implementation
+
+This review focuses on the backend portion of the MotoTrack application, specifically the API endpoints, database schema, and business logic responsible for managing users, motorcycles, and maintenance records.
+
+This part of the system is critical because it controls how data is stored, validated, and accessed. It also ensures that users can only interact with their own data through proper authentication and authorization. Since Elijah was responsible for backend development, database design, and coordination of system logic, this section represents a major portion of the project.
+
+---
+
+## 2. Scope of Review
+
+**Files examined:**
+- `server/app/models.py`
+- `server/app/routes/auth.py`
+- `server/app/routes/motorcycles.py`
+- `server/app/routes/maintenance.py`
+- `server/app/routes/dashboard.py`
+- `server/run.py`
+
+
+---
+
+## 3. Review Findings
+
+### A. Correctness
+
+**What works well:**
+The backend successfully supports the core functionality of the application. API endpoints behave as expected, allowing users to register, log in, create motorcycles, and log maintenance entries. Data relationships are handled correctly, ensuring proper linkage between users and their records.
+
+**What could be improved:**
+There are areas where edge cases are not fully accounted for. For example, invalid IDs, missing request fields, or empty datasets could be handled more explicitly. Adding consistent error handling would improve reliability.
+
+---
+
+### B. Architecture
+
+**What works well:**
+The backend structure follows a logical organization. Routes, models, and logic are separated in a way that aligns with standard full-stack architecture. This makes the application easier to understand and scale.
+
+**What could be improved:**
+Some business logic is directly embedded in route files. Moving this logic into separate service functions or utility modules would improve separation of concerns and make the codebase more maintainable.
+
+---
+
+### C. Code Quality & Maintainability
+
+**What works well:**
+The codebase is organized clearly, and naming conventions are mostly consistent. It is relatively easy to follow the flow of data from request to response.
+
+**What could be improved:**
+Some functions are doing multiple tasks at once, which makes them harder to maintain. Breaking these into smaller, focused functions would improve readability. Additionally, more inline comments would help explain complex logic.
+
+---
+
+### D. Security & Validation
+
+**What works well:**
+Authentication is properly implemented using JWT, and protected routes correctly restrict access to authorized users. This ensures that users cannot access or modify data that does not belong to them.
+
+**What could be improved:**
+Input validation should be more consistent across all endpoints. Currently, some routes assume valid input without checking required fields or data types. Adding validation would improve both security and stability.
+
+---
+
+### E. Performance
+
+**What works well:**
+The current implementation is efficient for the size of the application. Database interactions are simple and appropriate for the MVP stage.
+
+**What could be improved:**
+As more data is added, certain queries—especially those used for dashboard aggregation—may become slower. Adding indexing or optimizing queries early could help prevent performance issues later.
+
+---
+
+## 4. Key Recommendations
+
+- Add validation checks for all incoming request data
+- Move business logic out of route handlers into separate functions
+- Standardize API error responses for consistency
+- Improve handling of edge cases (invalid IDs, empty results)
+- Add comments for complex logic sections
+- Refactor large functions into smaller reusable pieces
+
+---
+
+## 5. Review Summary
+
+Overall, the backend implementation is solid and provides a reliable foundation for the application. The system functions correctly and aligns with the intended architecture. Most of the recommended improvements focus on long-term maintainability, code clarity, and handling of edge cases rather than major structural problems.
+
+**Decision:**  
+Approved for use with minor improvements suggested before final submission.
+
+---
+
+## 6. Reflection
+
+### Issues Identified
+The main issues discovered were related to input validation, edge case handling, and code organization. While these do not prevent the application from functioning, they could lead to issues as the system grows.
+
+### Architectural Observations
+The overall architecture is sound and follows the expected client-server model. However, separating business logic further would strengthen the design and make future updates easier.
+
+### Risk Without Review
+If this code had been merged without review, the application would still run, but it would be more prone to bugs, harder to maintain, and less scalable over time. These small issues could accumulate into larger problems later in development.
+
+### Future Process
+Going forward, code reviews should be a required step before merging any feature. Using a structured checklist like this will help catch issues early and improve overall code quality across the team.
