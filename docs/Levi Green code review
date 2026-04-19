@@ -1,0 +1,119 @@
+# Structured Code Review & Quality Audit  
+**Project:** MotoTrack  
+**Reviewer:** Elijah Garnes  
+**Developer Reviewed:** Levi Green  
+**Review Type:** Peer Review  
+**Date:** 4/10/2026
+
+---
+
+# Part 1: Code Selection
+
+## Feature Name
+**Front-End Dashboard and User Workflow Implementation**
+
+## Brief Description
+The selected feature for review is the front-end implementation of MotoTrack’s user-facing workflow, including the dashboard interface, motorcycle management views, maintenance log interaction, and supporting UI structure. This portion of the application is meaningful because it represents the primary way users interact with the system. It directly affects usability, clarity, and the effectiveness of the application’s core workflows.
+
+This review focused on the code responsible for presenting data returned from the API, handling user actions through forms and buttons, and providing a clean interface for key tasks such as viewing motorcycles, creating maintenance logs, and navigating the dashboard. Since Levi Green’s responsibilities include front-end development, UI/UX design, user workflows and usability testing, and documentation support, this feature is an appropriate and substantial area for peer review.
+
+## Files Reviewed
+- `client/`
+- `server/app/static/index.html`
+- `server/app/static/app.js`
+- `server/app/static/styles.css`
+
+## Approximate Lines of Code
+Approximately **250–400 lines of code** were reviewed across the HTML, JavaScript, and CSS files related to the dashboard and user workflows.
+
+---
+
+# Part 2: Structured Code Review
+
+## A. Correctness
+
+### Strength
+The front-end correctly supports the intended high-level user workflow. Users are able to access the interface, navigate the dashboard, submit forms, and view returned data in a way that aligns with the MotoTrack requirements. The screens and interactions generally match the expected use cases for motorcycle profile creation and maintenance tracking.
+
+### Improvement Suggestion
+Some error states need stronger handling. For example, if the API returns an error or invalid data, the UI should display a more explicit and user-friendly error message instead of failing silently or leaving the user unsure of what happened. Edge cases such as empty dashboard data, invalid form submissions, or failed login attempts should be communicated more clearly.
+
+---
+
+## B. Architecture Alignment
+
+### Strength
+The front-end is appropriately separated from the back-end business logic. The interface handles presentation and user interaction, while the server remains responsible for authentication, data validation, and persistence. This supports a cleaner architecture and keeps the system aligned with the client/server design planned earlier in the project.
+
+### Improvement Suggestion
+Some of the JavaScript could be further modularized to reduce coupling between UI rendering and API-calling logic. Separating data-fetching functions from DOM update functions would improve maintainability and make the code easier to test and extend in future sprints.
+
+---
+
+## C. Readability & Maintainability
+
+### Strength
+Naming conventions are generally understandable, and the structure of the pages makes it clear what each part of the interface is responsible for. The layout is simple enough for future team members to understand without extensive ramp-up time.
+
+### Improvement Suggestion
+Some repeated logic should be consolidated into helper functions. For example, if multiple UI sections are rendered using similar patterns, creating reusable rendering functions would reduce duplication and make updates easier. Adding a few more comments around workflow-related JavaScript would also help future maintenance.
+
+---
+
+## D. Security & Validation
+
+### Strength
+The reviewed feature relies on the back-end for protected operations, which is the correct architectural choice. Authentication-sensitive actions are not handled purely in the front-end, and this reduces the risk of trusting client-side input alone.
+
+### Improvement Suggestion
+Client-side validation should be strengthened to improve the user experience and provide earlier feedback before data is submitted. For example, required fields, mileage values, and maintenance inputs should be checked in the interface before the request is sent. This does not replace server-side validation, but it improves usability and helps prevent avoidable bad requests.
+
+---
+
+## E. Performance Considerations
+
+### Strength
+The current UI is lightweight and should perform well for the project’s current scale. The rendering logic is straightforward, and there do not appear to be excessive loops or unnecessary styling complexity that would immediately harm performance.
+
+### Improvement Suggestion
+As the application grows, repeated full-page refreshes or redundant API fetches could become a bottleneck. The front-end should avoid reloading all dashboard data after every small action if only one section needs updating. More targeted refreshes would improve responsiveness and reduce unnecessary server calls.
+
+---
+
+# Actionable Review Comments
+
+1. **Add clearer user-facing error messages** for failed API calls, invalid login attempts, and empty data states so users know what action to take next.
+2. **Separate API request logic from DOM rendering logic** in `app.js` to improve maintainability and support easier debugging.
+3. **Add client-side form validation** for required fields, mileage inputs, and maintenance entries before submitting to the server.
+4. **Refactor repeated rendering patterns into reusable helper functions** to reduce duplication and support future UI updates more efficiently.
+5. **Limit unnecessary full dashboard refreshes** after actions like adding a motorcycle or maintenance entry; instead, refresh only the affected section.
+6. **Improve empty-state design** so that users who have no motorcycles or maintenance logs still receive clear guidance on what to do next.
+7. **Add inline comments for major workflow functions** to make the front-end easier for teammates to maintain in later sprints.
+
+---
+
+# Review Outcome
+
+## Summary of Feedback
+Overall, Levi’s front-end implementation provides a strong foundation for MotoTrack’s user experience. The workflow is understandable, the design aligns with the system goals, and the feature is already functional enough to support milestone demonstrations. The most important improvements involve validation, better separation of concerns in JavaScript, and clearer handling of errors and empty states.
+
+## Review Decision
+**Requested Changes Before Final Integration**
+
+The code is a solid base, but the suggested updates would improve reliability, maintainability, and overall user experience before final merge.
+
+---
+
+# Part 3: Reflection
+
+## What issues were discovered during the review?
+Several issues were identified during the review. The main concerns involved limited client-side validation, weak handling of edge cases such as empty dashboard states, and opportunities to reduce duplicated rendering logic in the front-end JavaScript. While the code was functional, some of these issues would affect the user experience and make future updates more difficult if left unresolved.
+
+## Were any architectural inconsistencies identified?
+No major architectural violations were found, but there were some minor concerns related to separation of concerns in the front-end code. In particular, some JavaScript sections combined API communication and DOM updates too closely. While this is manageable at the MVP stage, it could create maintainability problems as the application grows. Refactoring these responsibilities into clearer functions would better align the implementation with the intended architecture.
+
+## What would have happened if this code were merged without review?
+If the code had been merged without review, the application would still function, but several avoidable issues would remain. Users might encounter confusing error situations, future developers would have a harder time maintaining the code, and the front-end could become more difficult to extend cleanly in later sprints. Over time, these issues could slow development and increase the likelihood of defects.
+
+## How will you integrate code reviews into future sprints?
+In future sprints, code reviews should be built into the definition of done for all meaningful features. Before merging, each major feature should be reviewed against a checklist covering correctness, architecture, maintainability, security, and performance. Review comments should be documented directly in pull requests, and team members should address required changes before integration. This process will improve code quality, reduce regressions, and help the team maintain a more professional development workflow.
